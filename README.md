@@ -1,50 +1,124 @@
-# template-for-proposals
+# Object.{get, set}
 
-A repository template for ECMAScript proposals.
+# Table of content:
++ [Motivations](#motivations)
++ [Features](#features)
++ [Improvements](#improvements)
++ [Open-ended questions](#open-ended-questions)
++ [Similar possibilities in other libraries](#similar-possibilities-in-other-libraries)
+    + [Lodash](#lodash)
+    + [Rambda](#rambda)
+    + [underscore](#underscore)
++ [Links](#links)
+    + [Discussions](#discussions)
 
-## Before creating a proposal
+# Motivations
 
-Please ensure the following:
-  1. You have read the [process document](https://tc39.github.io/process-document/)
-  1. You have reviewed the [existing proposals](https://github.com/tc39/proposals/)
-  1. You are aware that your proposal requires being a member of TC39, or locating a TC39 delegate to “champion” your proposal
+This proposal suggests the new static methods for Object which will work with a path instead of a specific key:
++ get
++ set
 
-## Create your proposal repo
+Both of them are mostly inspired by libraries which are providing similar functionality
 
-Follow these steps:
-  1. Click the green [“use this template”](https://github.com/tc39/template-for-proposals/generate) button in the repo header. (Note: Do not fork this repo in GitHub's web interface, as that will later prevent transfer into the TC39 organization)
-  1. Update ecmarkup and the biblio to the latest version: `npm install --save-dev ecmarkup@latest && npm install --save-dev --save-exact @tc39/ecma262-biblio@latest`.
-  1. Go to your repo settings page:
-      1. Under “General”, under “Features”, ensure “Issues” is checked, and disable “Wiki”, and “Projects” (unless you intend to use Projects)
-      1. Under “Pull Requests”, check “Always suggest updating pull request branches” and “automatically delete head branches”
-      1. Under the “Pages” section on the left sidebar, and set the source to “deploy from a branch”, select “gh-pages” in the branch dropdown, and then ensure that “Enforce HTTPS” is checked.
-      1. Under the “Actions” section on the left sidebar, under “General”, select “Read and write permissions” under “Workflow permissions” and click “Save”
-  1. [“How to write a good explainer”][explainer] explains how to make a good first impression.
+Path like a string:
 
-      > Each TC39 proposal should have a `README.md` file which explains the purpose
-      > of the proposal and its shape at a high level.
-      >
-      > ...
-      >
-      > The rest of this page can be used as a template ...
+```js
+const obj = {
+  a: 1,
+  b: 2,
+  c: {
+    d: {
+      e: 54
+    }
+  }
+}
 
-      Your explainer can point readers to the `index.html` generated from `spec.emu`
-      via markdown like
+console.log(Object.get(obj, 'a')); // 1
+console.log(Object.get(obj, 'a.b')); // undefined
+console.log(Object.get(obj, 'c.d.e')); // 54
+console.log(Object.get(obj, 'c.d.e.f.g.h')); // undefined
 
-      ```markdown
-      You can browse the [ecmarkup output](https://ACCOUNT.github.io/PROJECT/)
-      or browse the [source](https://github.com/ACCOUNT/PROJECT/blob/HEAD/spec.emu).
-      ```
+Object.set(obj, 'a', 78);
+console.log(Object.get(obj, 'a')); // 78
 
-      where *ACCOUNT* and *PROJECT* are the first two path elements in your project's Github URL.
-      For example, for github.com/**tc39**/**template-for-proposals**, *ACCOUNT* is “tc39”
-      and *PROJECT* is “template-for-proposals”.
+Object.set(obj, 'a.q.z', 87);
+console.log(Object.get(obj, 'a')); // 78
+console.log(Object.get(obj, 'a.q')); // undefined
+console.log(Object.get(obj, 'a.q.z')); // undefined
+
+Object.set(obj, 'c.d.e', 123);
+console.log(Object.get(obj, 'c.d.e')); // 123
+
+Object.set(obj, 'c.d.e.f.g.h', [34, 67]);
+console.log(Object.get(obj, 'c.d.e.f.g.h')); // [34, 67]
+```
+
+Path like an array (for keys which are hard or impossible to represent with joining by dot):
+
+```js
+const obj = {
+  a: 1,
+  b: 2,
+  c: {
+    d: {
+      e: 54
+    }
+  }
+}
+
+console.log(Object.get(obj, ['a'])); // 1
+console.log(Object.get(obj, ['a', 'b'])); // undefined
+console.log(Object.get(obj, ['c', 'd', 'e'])); // 54
+console.log(Object.get(obj, ['c', 'd', 'e.f', 'g.h'])); // undefined
+
+Object.set(obj, ['a'], 78);
+console.log(Object.get(obj, ['a'])); // 78
+
+Object.set(obj, ['a', 'q', 'z'], 87);
+console.log(Object.get(obj, ['a'])); // 78
+console.log(Object.get(obj, ['a', 'q'])); // undefined
+console.log(Object.get(obj, ['a', 'q', 'z'])); // undefined
+
+Object.set(obj, ['c', 'd', 'e'], 123);
+console.log(Object.get(obj, ['c', 'd', 'e'])); // 123
+
+Object.set(obj, ['c', 'd.e', 'f', 'g.h'], [34, 67]);
+console.log(Object.get(obj, ['c.d', 'e', 'f.g', 'h'])); // [34, 67]
+```
+
+# Features
+
+# Improvements
+
+# Open-ended questions
+
+# Similar possibilities in other libraries
+
+### Lodash
+
+### Rambda
+
+### underscore
+
+# Links
+
+## Discussions
+
++ [Object.{get, set}](https://es.discourse.group/t/object-get-set/2372)
+
+---
+
+### P.S.
+Please don't hesitate to:
+
++ give a star ☆
++ share your ideas
++ share this proposal with others
++ provide more useful examples
++ provide possible problems with this proposal
++ suggest text improvements
++ help with `emu` file
 
 
-## Maintain your proposal repo
-
-  1. Make your changes to `spec.emu` (ecmarkup uses HTML syntax, but is not HTML, so I strongly suggest not naming it “.html”)
-  1. Any commit that makes meaningful changes to the spec, should run `npm run build` to verify that the build will succeed and the output looks as expected.
-  1. Whenever you update `ecmarkup`, run `npm run build` to verify that the build will succeed and the output looks as expected.
-
-  [explainer]: https://github.com/tc39/how-we-work/blob/HEAD/explainer.md
+You can browse the [ecmarkup output](https://EzioMercer.github.io/destructuring-with-alias-binding/)
+or browse the [source](https://github.com/EzioMercer/destructuring-with-alias-binding/blob/main/spec.emu)
