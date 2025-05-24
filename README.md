@@ -3,6 +3,9 @@
 # Table of content:
 + [Motivations](#motivations)
 + [Open-ended questions](#open-ended-questions)
+  + [Delimiter](#delimiter)
+  + [Number like keys](#number-like-keys)
+  + [Path like an iterable](#path-like-an-iterable)
 + [Similar possibilities in other libraries](#similar-possibilities-in-libraries)
     + [Lodash](#lodash)
       + [_.get](#_-get)
@@ -90,6 +93,28 @@ console.log(Object.get(obj, ['c', 'd', 'e', 'f', 'g', 'h'])); // [34, 67]
 ```
 
 # Open-ended questions
+
+## Delimiter
+
+Should a delimiter be a dot?
+
+It is very intuitive but may be there are better options
+
+## Number like keys
+
+How should number keys be implemented?
+
+Possible options:
+
++ Only like a string (`'a.0.b'` or `['a', '0', 'b']`)
++ Only like a number (`'a.0.b'` or `['a', 0, 'b']`)
++ Only in square brackets but separate from a previous key (`'a.[0].b'` or `['a', '[0]', 'b']`)
++ Only in square brackets but right next a previous key (`'a[0].b'` or `['a', '[0]', 'b']`)
++ Any combination of previous options
+
+## Path like an iterable
+
+Can a path be represented like a non-Array object with `[Symbol.iterator]` symbol?n
 
 # Similar possibilities in libraries
 
