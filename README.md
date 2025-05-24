@@ -2,13 +2,16 @@
 
 # Table of content:
 + [Motivations](#motivations)
-+ [Features](#features)
-+ [Improvements](#improvements)
 + [Open-ended questions](#open-ended-questions)
-+ [Similar possibilities in other libraries](#similar-possibilities-in-other-libraries)
++ [Similar possibilities in other libraries](#similar-possibilities-in-libraries)
     + [Lodash](#lodash)
+      + [_.get](#_-get)
+      + [_.set](#_-set)
     + [Rambda](#rambda)
+      + [R.path](#rpath)
+      + [R.assocPath](#rassocpath)
     + [underscore](#underscore)
+      + [_.get](#_-get-1)
 + [Links](#links)
     + [Discussions](#discussions)
 
@@ -86,19 +89,81 @@ Object.set(obj, ['c', 'd.e', 'f', 'g.h'], [34, 67]);
 console.log(Object.get(obj, ['c.d', 'e', 'f.g', 'h'])); // [34, 67]
 ```
 
-# Features
-
-# Improvements
-
 # Open-ended questions
 
-# Similar possibilities in other libraries
+# Similar possibilities in libraries
 
-### Lodash
+## Lodash
 
-### Rambda
+### [_.get](https://lodash.com/docs/4.17.15#get)
 
-### underscore
+```js
+var object = { 'a': [{ 'b': { 'c': 3 } }] };
+ 
+_.get(object, 'a[0].b.c');
+// => 3
+ 
+_.get(object, ['a', '0', 'b', 'c']);
+// => 3
+ 
+_.get(object, 'a.b.c', 'default');
+// => 'default'
+```
+
+### [_.set](https://lodash.com/docs/4.17.15#set)
+
+Note: mutate
+
+```js
+var object = { 'a': [{ 'b': { 'c': 3 } }] };
+ 
+_.set(object, 'a[0].b.c', 4);
+console.log(object.a[0].b.c);
+// => 4
+ 
+_.set(object, ['x', '0', 'y', 'z'], 5);
+console.log(object.x[0].y.z);
+// => 5
+```
+
+## Rambda
+
+### [R.path](https://ramdajs.com/docs/#path)
+
+```js
+R.path(['a', 'b'], {a: {b: 2}}); //=> 2
+R.path(['a', 'b'], {c: {b: 2}}); //=> undefined
+R.path(['a', 'b', 0], {a: {b: [1, 2, 3]}}); //=> 1
+R.path(['a', 'b', -2], {a: {b: [1, 2, 3]}}); //=> 2
+R.path([2], {'2': 2}); //=> 2
+R.path([-2], {'-2': 'a'}); //=> undefined
+```
+
+### [R.assocPath](https://ramdajs.com/docs/#assocPath)
+
+Note: shallow clone
+
+```js
+R.assocPath(['a', 'b', 'c'], 42, {a: {b: {c: 0}}}); //=> {a: {b: {c: 42}}}
+
+// Any missing or non-object keys in path will be overridden
+R.assocPath(['a', 'b', 'c'], 42, {a: 5}); //=> {a: {b: {c: 42}}}
+```
+
+## underscore
+
+### [_.get](https://underscorejs.org/#get)
+
+```js
+_.get({a: 10}, 'a');
+// => 10
+
+_.get({a: [{b: 2}]}, ['a', 0, 'b']);
+// => 2
+
+_.get({a: 10}, 'b', 100);
+// => 100
+```
 
 # Links
 
