@@ -72,7 +72,7 @@ const obj = {
 console.log(Object.get(obj, ['a'])); // 1
 console.log(Object.get(obj, ['a', 'b'])); // undefined
 console.log(Object.get(obj, ['c', 'd', 'e'])); // 54
-console.log(Object.get(obj, ['c', 'd', 'e.f', 'g.h'])); // undefined
+console.log(Object.get(obj, ['c', 'd', 'e', 'f', 'g', 'h'])); // undefined
 
 Object.set(obj, ['a'], 78);
 console.log(Object.get(obj, ['a'])); // 78
@@ -85,8 +85,8 @@ console.log(Object.get(obj, ['a', 'q', 'z'])); // undefined
 Object.set(obj, ['c', 'd', 'e'], 123);
 console.log(Object.get(obj, ['c', 'd', 'e'])); // 123
 
-Object.set(obj, ['c', 'd.e', 'f', 'g.h'], [34, 67]);
-console.log(Object.get(obj, ['c.d', 'e', 'f.g', 'h'])); // [34, 67]
+Object.set(obj, ['c', 'd', 'e', 'f', 'g', 'h'], [34, 67]);
+console.log(Object.get(obj, ['c', 'd', 'e', 'f', 'g', 'h'])); // [34, 67]
 ```
 
 # Open-ended questions
